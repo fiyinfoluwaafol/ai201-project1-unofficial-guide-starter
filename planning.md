@@ -9,7 +9,7 @@
 
 ## Domain
 
-<!-- What domain did you choose? Why is this knowledge valuable and hard to find through official channels? -->
+My domain is an unofficial guide for ProPresenter operators in church/media team environments. The guide focuses on practical questions around lyrics, scriptures, stage display, audience screens, looks, props, macros, lower thirds, OBS/ATEM routing, and common Sunday-service troubleshooting. This knowledge is valuable because new volunteers often have to learn ProPresenter through scattered official docs, YouTube tutorials, Reddit threads, and last-minute troubleshooting during service.
 
 ---
 

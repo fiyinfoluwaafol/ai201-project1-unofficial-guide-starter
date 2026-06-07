@@ -143,6 +143,20 @@ The likely production upgrade would be hybrid retrieval plus metadata boosting a
      You can use ASCII art, a Mermaid diagram, or embed a sketch as an image.
      You'll use this diagram as context when prompting AI tools to implement each stage. -->
 
+```mermaid
+flowchart TD
+    A["documents/*.md<br/>Official docs + transcript<br/>Markdown with front matter"] --> B["Document Ingestion<br/>Python + pathlib<br/>Parse metadata and body text"]
+    B --> C["Chunking<br/>Custom Python chunker<br/>Heading-aware docs<br/>Timestamp-group transcripts"]
+    C --> D["Embedding<br/>sentence-transformers<br/>all-MiniLM-L6-v2"]
+    D --> E["Vector Store<br/>ChromaDB collection<br/>Embeddings + text + metadata"]
+    F["User question"] --> G["Query Embedding<br/>same MiniLM model"]
+    G --> H["Retrieval<br/>ChromaDB similarity search<br/>top_k = 5"]
+    E --> H
+    H --> I["Context Builder<br/>Top chunks + titles<br/>URLs + heading paths"]
+    I --> J["Generation<br/>Groq SDK + grounded prompt<br/>Answer only from retrieved context"]
+    J --> K["User answer<br/>Practical steps + source attribution<br/>Clarify or say out-of-scope when needed"]
+```
+
 ---
 
 ## AI Tool Plan

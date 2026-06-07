@@ -173,6 +173,24 @@ flowchart TD
 
 **Milestone 3 — Ingestion and chunking:**
 
+I will use OpenAI Codex to implement the document ingestion and chunking code. I will give Codex the Documents section of `planning.md`, the Chunking Strategy section of `planning.md`, and the more detailed notes in `docs/chunking-strategy-analysis.md`.
+
+I will ask Codex to produce Python code that reads every Markdown file in `documents/`, parses the YAML-style front matter, preserves metadata such as `title`, `source`, `type`, and `product`, and returns structured document records. Then I will ask it to implement the hybrid chunking strategy: heading-aware chunks for official docs, conservative standalone bold labels as soft headings, timestamp-group chunks for transcript sources, a target chunk size of about 400-700 tokens, a maximum chunk size of about 800-1,000 tokens, and 75-125 tokens of overlap only when oversized sections must be split.
+
+I expect Codex to produce ingestion and chunking functions or modules, plus a small script I can run to inspect the resulting chunks. I will verify the output by checking that all 14 Markdown files are loaded, front matter is preserved, source URLs stay attached to chunks, heading paths are included, the Keyboard Shortcuts tables are not split awkwardly, and the transcript chunks preserve timestamp ranges. I will also compare the chunk counts and largest chunks against the observations in `docs/chunking-strategy-analysis.md`.
+
 **Milestone 4 — Embedding and retrieval:**
 
+I will use OpenAI Codex to implement embedding, vector storage, and retrieval. I will give Codex the Retrieval Approach section of `planning.md`, the detailed analysis in `docs/retrieval-approach-analysis.md`, the chunk metadata fields from the Chunking Strategy section, and the architecture diagram from `planning.md`.
+
+I will ask Codex to produce Python code that embeds each chunk using `all-MiniLM-L6-v2` through `sentence-transformers`, stores the embeddings, chunk text, and metadata in a ChromaDB collection, and retrieves relevant chunks for a user query with dense semantic search. The first version should use `top_k = 5`, embed the chunk title and heading path along with the chunk text, and return scores, source titles, source URLs, heading paths, and chunk text so retrieval can be inspected.
+
+I expect Codex to produce an indexing script and a retrieval function. I will verify the output by running the five Evaluation Plan questions and checking whether the retrieved chunks include the expected source documents. For example, the Stage Layout shortcut question should retrieve the Stage Screen or Keyboard Shortcuts article, the lower-thirds question should retrieve the Looks article, and the audio `M`, `S`, and `T` question should retrieve the Audio Routing article. If retrieval misses exact shortcuts or menu labels, I will use those failures to decide whether to add metadata boosting or keyword search later.
+
 **Milestone 5 — Generation and interface:**
+
+I will use OpenAI Codex to implement the grounded answer generation and a simple query interface. I will give Codex the Generation section implied by the Architecture diagram in `planning.md`, the Stage 5 section of `docs/pipeline-architecture-analysis.md`, the Evaluation Plan section of `planning.md`, and the Anticipated Challenges section so it knows the grounding risks.
+
+I will ask Codex to produce code that takes the user's question, calls the retrieval function, formats the top retrieved chunks with their titles, URLs, heading paths, and content, and sends that context to a Groq-hosted LLM with a strict grounding prompt. The prompt should instruct the model to answer only from retrieved ProPresenter context, ask a clarifying question when the prompt is vague, say when the documents do not contain enough information, and include source attribution in the response. For the interface, I will start with a simple CLI so I can test the full pipeline quickly, and only add Gradio or Streamlit later if time allows.
+
+I expect Codex to produce a generation function and a runnable interface script. I will verify it by running the five planned evaluation questions through the full pipeline and recording the summarized system responses, retrieval quality, and response accuracy in the final Evaluation Report. I will also test vague and unrelated questions from `docs/evaluation-plan-analysis.md` to confirm that the system asks for clarification or says the answer is out of scope instead of inventing unsupported advice.

@@ -76,9 +76,33 @@ Each chunk should preserve metadata such as `source_file`, `source_url`, `title`
 
 **Embedding model:**
 
+I will use `all-MiniLM-L6-v2` through `sentence-transformers` as the MVP embedding model. This model is small, fast, inexpensive to run locally, and good enough for a small English-language RAG corpus built mostly from official documentation.
+
+Each chunk should be embedded with its title, heading path, document type, and chunk text. Including the title and heading path in the embedded text should help the retriever match product-specific terms like Looks, Stage Screens, Bibles, Macros, Media Inspector, and Audio Routing.
+
+The baseline retriever will use dense semantic vector search with cosine similarity. Semantic search is a good fit because volunteer questions may use different wording from the official docs. For example, a user might ask about a "confidence monitor" even though the documentation says "stage screen." Embeddings can still place those ideas near each other because they are semantically related.
+
 **Top-k:**
 
+I will start with `top_k = 5`, meaning the retriever will return the five most relevant chunks for each user query.
+
+Five chunks should give the LLM enough context for most ProPresenter questions without overwhelming the prompt with loosely related material. If too few chunks are retrieved, the answer may miss key context, especially for multi-feature workflows involving screens, looks, routing, and stage displays. If too many chunks are retrieved, the answer may become less focused, use noisy context, or blend details from unrelated sources.
+
+During evaluation, I may tune this by query type:
+
+- Use `top_k = 3` for narrow shortcut or menu questions.
+- Use `top_k = 5` for normal feature questions.
+- Use `top_k = 6-8` for broader troubleshooting or multi-feature workflow questions.
+
+The final prompt should usually receive about 4-6 high-quality chunks. I should not pass low-score chunks into generation just to fill the requested `top_k`.
+
 **Production tradeoff reflection:**
+
+If this guide were deployed for real users and cost was not a constraint, I would compare embedding models and retrieval strategies across accuracy, context length, domain-specific performance, multilingual support, latency, cost, privacy, and maintainability.
+
+A larger or newer embedding model might retrieve better chunks for complex troubleshooting questions and specialized ProPresenter terms. A longer-context embedding model could represent larger sections more accurately. A multilingual model would be useful if church media volunteers asked questions in languages other than English. However, larger hosted models can add latency, API cost, and privacy concerns.
+
+The likely production upgrade would be hybrid retrieval plus metadata boosting and reranking. Semantic vector search would handle meaning, BM25 keyword search would handle exact ProPresenter terms and shortcuts, metadata would prioritize source-aware results and improve citations, and a reranker would select the final 4-6 chunks passed to the LLM.
 
 ---
 

@@ -78,7 +78,9 @@ Each chunk should preserve metadata such as `source_file`, `source_url`, `title`
 
 I will use `all-MiniLM-L6-v2` through `sentence-transformers` as the MVP embedding model. This model is small, fast, inexpensive to run locally, and good enough for a small English-language RAG corpus built mostly from official documentation.
 
-Each chunk should be embedded with its title, heading path, document type, and chunk text. Including the title and heading path in the embedded text should help the retriever match product-specific terms like Looks, Stage Screens, Bibles, Macros, Media Inspector, and Audio Routing.
+Each chunk should be embedded with its title, heading path, document type, chunk index, source file, and chunk text. Including the title and heading path in the embedded text should help the retriever match product-specific terms like Looks, Stage Screens, Bibles, Macros, Media Inspector, and Audio Routing.
+
+The chunking refinement can split broad single-heading articles into multiple sub-chunks that share the same `heading_path`. Because of that, the embedding text should include `chunk_index` and source context so adjacent sub-chunks from the same article remain distinguishable during retrieval and debugging.
 
 The baseline retriever will use dense semantic vector search with cosine similarity. Semantic search is a good fit because volunteer questions may use different wording from the official docs. For example, a user might ask about a "confidence monitor" even though the documentation says "stage screen." Embeddings can still place those ideas near each other because they are semantically related.
 
@@ -183,7 +185,7 @@ I expect Codex to produce ingestion and chunking functions or modules, plus a sm
 
 I will use OpenAI Codex to implement embedding, vector storage, and retrieval. I will give Codex the Retrieval Approach section of `planning.md`, the detailed analysis in `docs/retrieval-approach-analysis.md`, the chunk metadata fields from the Chunking Strategy section, and the architecture diagram from `planning.md`.
 
-I will ask Codex to produce Python code that embeds each chunk using `all-MiniLM-L6-v2` through `sentence-transformers`, stores the embeddings, chunk text, and metadata in a ChromaDB collection, and retrieves relevant chunks for a user query with dense semantic search. The first version should use `top_k = 5`, embed the chunk title and heading path along with the chunk text, and return scores, source titles, source URLs, heading paths, and chunk text so retrieval can be inspected.
+I will ask Codex to produce Python code that embeds each chunk using `all-MiniLM-L6-v2` through `sentence-transformers`, stores the embeddings, chunk text, and metadata in a ChromaDB collection, and retrieves relevant chunks for a user query with dense semantic search. The first version should use `top_k = 5`, embed the chunk title, heading path, document type, source file, chunk index, and chunk text, and return scores, source titles, source URLs, heading paths, chunk indexes, and chunk text so retrieval can be inspected. Including chunk index matters because some refined chunks may share the same article title and heading path.
 
 I expect Codex to produce an indexing script and a retrieval function. I will verify the output by running the five Evaluation Plan questions and checking whether the retrieved chunks include the expected source documents. For example, the Stage Layout shortcut question should retrieve the Stage Screen or Keyboard Shortcuts article, the lower-thirds question should retrieve the Looks article, and the audio `M`, `S`, and `T` question should retrieve the Audio Routing article. If retrieval misses exact shortcuts or menu labels, I will use those failures to decide whether to add metadata boosting or keyword search later.
 

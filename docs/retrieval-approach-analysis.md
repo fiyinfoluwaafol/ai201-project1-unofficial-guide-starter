@@ -362,7 +362,7 @@ This is the best MVP because it is easy to build, inexpensive to run, and likely
 Recommended retrieval flow:
 
 1. Load chunk records from the chunking pipeline.
-2. Build embedding text from the chunk title, heading path, and chunk body.
+2. Build embedding text from the chunk title, heading path, document type, source file, chunk index, and chunk body.
 3. Embed chunks with `all-MiniLM-L6-v2`.
 4. Store vectors with chunk metadata.
 5. Embed the user query.
@@ -376,11 +376,13 @@ Suggested embedded text format:
 Title: Using Bibles in ProPresenter
 Section: Bible Slide Options
 Type: official_docs
+Source file: documents/using-bibles-in-propresenter.md
+Chunk index: 4
 
 [chunk text here]
 ```
 
-Adding title and section text to the embedded content should improve matching for product-specific terms without requiring a more complex retriever.
+Adding title and section text to the embedded content should improve matching for product-specific terms without requiring a more complex retriever. The refined chunker can split broad single-heading articles into multiple sub-chunks with the same `heading_path`, so including `source_file` and `chunk_index` helps distinguish neighboring sub-chunks during retrieval inspection and prevents them from appearing identical in logs or debug output.
 
 ## Recommended Future Upgrade Path
 

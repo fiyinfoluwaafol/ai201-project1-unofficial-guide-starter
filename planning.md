@@ -155,7 +155,7 @@ flowchart TD
     G --> H["Retrieval<br/>ChromaDB similarity search<br/>top_k = 5"]
     E --> H
     H --> I["Context Builder<br/>Top chunks + titles<br/>URLs + heading paths"]
-    I --> J["Generation<br/>Groq SDK + grounded prompt<br/>Answer only from retrieved context"]
+    I --> J["Generation<br/>Groq SDK<br/>llama-3.3-70b-versatile<br/>GROQ_API_KEY from .env<br/>Grounded prompt"]
     J --> K["User answer<br/>Practical steps + source attribution<br/>Clarify or say out-of-scope when needed"]
 ```
 
@@ -193,6 +193,6 @@ I expect Codex to produce an indexing script and a retrieval function. I will ve
 
 I will use OpenAI Codex to implement the grounded answer generation and a simple query interface. I will give Codex the Generation section implied by the Architecture diagram in `planning.md`, the Stage 5 section of `docs/pipeline-architecture-analysis.md`, the Evaluation Plan section of `planning.md`, and the Anticipated Challenges section so it knows the grounding risks.
 
-I will ask Codex to produce code that takes the user's question, calls the retrieval function, formats the top retrieved chunks with their titles, URLs, heading paths, and content, and sends that context to a Groq-hosted LLM with a strict grounding prompt. The prompt should instruct the model to answer only from retrieved ProPresenter context, ask a clarifying question when the prompt is vague, say when the documents do not contain enough information, and include source attribution in the response. For the interface, I will start with a simple CLI so I can test the full pipeline quickly, and only add Gradio or Streamlit later if time allows.
+I will ask Codex to produce code that takes the user's question, calls the retrieval function, formats the top retrieved chunks with their titles, URLs, heading paths, and content, and sends that context to Groq's `llama-3.3-70b-versatile` model with a strict grounding prompt. This is the recommended default generation model because it is available on Groq's free tier and uses an OpenAI-compatible API style. The generation code should initialize the client with `from groq import Groq`, load `GROQ_API_KEY` from `.env`, and call the model through the Groq SDK. The prompt should instruct the model to answer only from retrieved ProPresenter context, ask a clarifying question when the prompt is vague, say when the documents do not contain enough information, and include source attribution in the response. For the interface, I will start with a simple CLI so I can test the full pipeline quickly, and only add Gradio or Streamlit later if time allows.
 
 I expect Codex to produce a generation function and a runnable interface script. I will verify it by running the five planned evaluation questions through the full pipeline and recording the summarized system responses, retrieval quality, and response accuracy in the final Evaluation Report. I will also test vague and unrelated questions from `docs/evaluation-plan-analysis.md` to confirm that the system asks for clarification or says the answer is out of scope instead of inventing unsupported advice.

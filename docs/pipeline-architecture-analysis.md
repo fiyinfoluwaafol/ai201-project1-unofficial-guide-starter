@@ -12,7 +12,7 @@ Document Ingestion -> Chunking -> Embedding + Vector Store -> Retrieval -> Gener
 
 The project will use a local document collection from `documents/` as the source of truth. The documents are already saved as Markdown files with YAML-style front matter containing metadata such as title, source URL, document type, and product.
 
-The pipeline should turn those Markdown files into structured chunks, embed those chunks with `sentence-transformers`, store them in ChromaDB, retrieve the most relevant chunks for a user question, and then send only the retrieved context to a Groq-hosted LLM for grounded answer generation.
+The pipeline should turn those Markdown files into structured chunks, embed those chunks with `sentence-transformers`, store them in ChromaDB, retrieve the most relevant chunks for a user question, and then send only the retrieved context to Groq's `llama-3.3-70b-versatile` model for grounded answer generation.
 
 The planned MVP stack is:
 
@@ -23,7 +23,7 @@ The planned MVP stack is:
 | Embedding | `sentence-transformers`, `all-MiniLM-L6-v2` | Convert each chunk into a semantic vector. |
 | Vector Store | ChromaDB | Store chunk vectors, text, and metadata for similarity search. |
 | Retrieval | ChromaDB cosine similarity, `top_k = 5` | Retrieve the most relevant chunks for a user query. |
-| Generation | Groq SDK, grounded system prompt | Generate an answer using only retrieved ProPresenter context. |
+| Generation | Groq SDK, `llama-3.3-70b-versatile`, grounded system prompt | Generate an answer using only retrieved ProPresenter context. |
 | Interface | CLI first; optional Gradio or Streamlit later | Let a user ask questions and view answers with sources. |
 
 ## Stage 1: Document Ingestion
@@ -215,7 +215,15 @@ The generation stage receives:
 
 ### Process
 
-The generator should use the Groq SDK and a grounding-focused system prompt.
+The generator should use the Groq SDK, Groq's `llama-3.3-70b-versatile` model, and a grounding-focused system prompt. This is the recommended default generation model because it is available on Groq's free tier and follows an OpenAI-compatible API style.
+
+The generation code should load `GROQ_API_KEY` from `.env` and initialize the client with:
+
+```python
+from groq import Groq
+
+client = Groq()
+```
 
 The system prompt should tell the model to:
 
@@ -266,7 +274,7 @@ flowchart TD
     G --> H["Retrieval<br/>ChromaDB similarity search<br/>top_k = 5"]
     E --> H
     H --> I["Context Builder<br/>Top chunks + titles<br/>URLs + heading paths"]
-    I --> J["Generation<br/>Groq SDK + grounded prompt<br/>Answer only from retrieved context"]
+    I --> J["Generation<br/>Groq SDK<br/>llama-3.3-70b-versatile<br/>GROQ_API_KEY from .env<br/>Grounded prompt"]
     J --> K["User answer<br/>Practical steps + source attribution<br/>Clarify or say out-of-scope when needed"]
 ```
 
@@ -280,7 +288,7 @@ The implementation can be organized into a few scripts or modules:
 | `chunk.py` | Convert document records into structured chunks. |
 | `embed_store.py` | Embed chunks and write them into ChromaDB. |
 | `retrieve.py` | Embed a query and retrieve relevant chunks from ChromaDB. |
-| `generate.py` | Build the grounded prompt and call Groq. |
+| `generate.py` | Build the grounded prompt and call Groq's `llama-3.3-70b-versatile` model with `GROQ_API_KEY` loaded from `.env`. |
 | `app.py` or `cli.py` | Provide the user-facing question-answer interface. |
 
 These names are suggestions only. The final implementation can combine smaller pieces if that is simpler for the MVP.

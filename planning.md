@@ -20,20 +20,20 @@ My domain is an unofficial guide for ProPresenter operators in church/media team
 
 | # | Source | Description | URL or location |
 |---|--------|-------------|-----------------|
-| 1 |How to Download + Install ProPresenter | In this tutorial, we’ll guide you step-by-step through how to download, install, and activate ProPresenter on your computer—whether you’re using macOS or Windows. This video is designed to help new users get started quickly and confidently, ensuring that ProPresenter is properly installed and ready for use without watermarks or activation issues. | https://www.youtube.com/watch?v=7awG_JK6eWo |
-| 2 | Understanding The ProPresenter User Interface | TODO | https://support.renewedvision.com/hc/en-us/articles/360041345954-Understanding-The-ProPresenter-User-Interface |
-| 3 | Keyboard Shortcuts in ProPresenter | TODO | https://support.renewedvision.com/hc/en-us/articles/360042123293-Keyboard-Shortcuts-in-ProPresenter |
-| 4 | Using Bibles in ProPresenter | TODO | https://support.renewedvision.com/hc/en-us/articles/360041347594-Using-Bibles-in-ProPresenter |
-| 5 | Using a Stage Screen to its Full Potential | TODO | https://support.renewedvision.com/hc/en-us/articles/360041407794-Using-a-Stage-Screen-to-its-Full-Potential |
-| 6 | Using Macros in ProPresenter | TODO | https://support.renewedvision.com/hc/en-us/articles/4402663090323-Using-Macros-in-ProPresenter |
-| 7 | Using Looks to Show Different Screen Content in ProPresenter | TODO | https://support.renewedvision.com/hc/en-us/articles/360041407174-Using-Looks-to-Show-Different-Screen-Content-in-ProPresenter |
-| 8 | Audio Routing in ProPresenter | TODO | https://support.renewedvision.com/hc/en-us/articles/360052696094-Audio-Routing-in-ProPresenter |
-| 9 | Audio Outputs in ProPresenter | TODO | https://support.renewedvision.com/hc/en-us/articles/360052697694-Audio-Outputs-in-ProPresenter |
-| 10 | Screen Configuration in ProPresenter | TODO | https://support.renewedvision.com/hc/en-us/articles/360041879173-Screen-Configuration-in-ProPresenter |
-| 11 | What is the Media Inspector | TODO |https://support.renewedvision.com/hc/en-us/articles/7200487649299-What-is-the-Media-Inspector |
-| 12 | Creating and Using Playlist Templates in ProPresenter | TODO | https://support.renewedvision.com/hc/en-us/articles/40377194830995-Creating-and-Using-Playlist-Templates-in-ProPresenter |
-| 13 | Guide to Using Themes in ProPresenter | TODO | https://support.renewedvision.com/hc/en-us/articles/34551484745875-Guide-to-Using-Themes-in-ProPresenter |
-| 14 | How to Create a Countdown for an Audience Screen | TODO | https://support.renewedvision.com/hc/en-us/articles/360050786794-How-to-Create-a-Countdown-for-an-Audience-Screen |
+| 1 | YouTube Video | How to Download + Install ProPresenter | https://www.youtube.com/watch?v=7awG_JK6eWo |
+| 2 | Official Documentation | Understanding The ProPresenter User Interface | https://support.renewedvision.com/hc/en-us/articles/360041345954-Understanding-The-ProPresenter-User-Interface |
+| 3 | Official Documentation | Keyboard Shortcuts in ProPresenter | https://support.renewedvision.com/hc/en-us/articles/360042123293-Keyboard-Shortcuts-in-ProPresenter |
+| 4 | Official Documentation | Using Bibles in ProPresenter | https://support.renewedvision.com/hc/en-us/articles/360041347594-Using-Bibles-in-ProPresenter |
+| 5 | Official Documentation | Using a Stage Screen to its Full Potential | https://support.renewedvision.com/hc/en-us/articles/360041407794-Using-a-Stage-Screen-to-its-Full-Potential |
+| 6 | Official Documentation | Using Macros in ProPresenter | https://support.renewedvision.com/hc/en-us/articles/4402663090323-Using-Macros-in-ProPresenter |
+| 7 | Official Documentation | Using Looks to Show Different Screen Content in ProPresenter | https://support.renewedvision.com/hc/en-us/articles/360041407174-Using-Looks-to-Show-Different-Screen-Content-in-ProPresenter |
+| 8 | Official Documentation | Audio Routing in ProPresenter | https://support.renewedvision.com/hc/en-us/articles/360052696094-Audio-Routing-in-ProPresenter |
+| 9 | Official Documentation | Audio Outputs in ProPresenter | https://support.renewedvision.com/hc/en-us/articles/360052697694-Audio-Outputs-in-ProPresenter |
+| 10 | Official Documentation | Screen Configuration in ProPresenter | https://support.renewedvision.com/hc/en-us/articles/360041879173-Screen-Configuration-in-ProPresenter |
+| 11 | Official Documentation | What is the Media Inspector | https://support.renewedvision.com/hc/en-us/articles/7200487649299-What-is-the-Media-Inspector |
+| 12 | Official Documentation | Creating and Using Playlist Templates in ProPresenter | https://support.renewedvision.com/hc/en-us/articles/40377194830995-Creating-and-Using-Playlist-Templates-in-ProPresenter |
+| 13 | Official Documentation | Guide to Using Themes in ProPresenter | https://support.renewedvision.com/hc/en-us/articles/34551484745875-Guide-to-Using-Themes-in-ProPresenter |
+| 14 | Official Documentation | How to Create a Countdown for an Audience Screen | https://support.renewedvision.com/hc/en-us/articles/360050786794-How-to-Create-a-Countdown-for-an-Audience-Screen |
 
 ---
 

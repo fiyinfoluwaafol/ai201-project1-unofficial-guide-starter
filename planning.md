@@ -46,9 +46,23 @@ My domain is an unofficial guide for ProPresenter operators in church/media team
 
 **Chunk size:**
 
+For official documentation, I will use hybrid heading-aware chunks. The chunker should first split each Markdown file by meaningful document structure: Markdown headings (`#`, `##`, `###`) and conservative standalone bold section labels such as `**File Menu**` or `**Creating a Macro**` when they function like headings. Most target chunks should land around 400-700 tokens.
+
+For YouTube transcripts, I will use timestamp-group chunks instead of heading chunks. The chunker should group adjacent timestamp paragraphs into chunks of roughly 250-500 words, preserving the first and last timestamp for citation.
+
+The maximum chunk size should be about 800-1,000 tokens. If a heading section is larger than that, it should be split further by paragraph, list block, or table block so that instructions and shortcut tables stay readable.
+
 **Overlap:**
 
+Use little or no overlap for normal heading-based chunks because the headings already preserve context. Add about 75-125 tokens of overlap only when splitting an oversized section into multiple sub-chunks.
+
 **Reasoning:**
+
+The current source set is mostly official Renewed Vision documentation with useful article titles, headings, lists, screenshots, links, and some table-heavy reference content. A simple fixed-size splitter would be easy to build, but it could cut through workflows, menu sections, keyboard shortcut tables, or troubleshooting instructions. Heading-aware chunking should produce cleaner retrieval results and better citations.
+
+Some documents only have one top-level heading but use bold standalone labels as real section boundaries, so the chunker should treat those as soft headings when they are short, text-only labels. The YouTube transcript is different because its natural structure is time-based, so timestamp grouping will make later citations more useful.
+
+Each chunk should preserve metadata such as `source_file`, `source_url`, `title`, `document_type`, `product`, `heading_path`, `chunk_index`, `text`, `token_count`, and transcript-only fields like `start_timestamp`, `end_timestamp`, `start_seconds`, and `end_seconds`.
 
 ---
 

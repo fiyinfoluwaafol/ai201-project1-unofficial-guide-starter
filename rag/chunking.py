@@ -45,7 +45,12 @@ def _chunk_official_doc(document: dict[str, Any]) -> list[dict[str, Any]]:
         if not text:
             continue
 
-        if estimate_token_count(text) <= MAX_TOKENS:
+        token_count = estimate_token_count(text)
+        should_soft_split = (
+            len(section["heading_path"]) == 1 and token_count > TARGET_TOKENS
+        )
+
+        if token_count <= MAX_TOKENS and not should_soft_split:
             chunks.append(_make_chunk(document, chunks, section["heading_path"], text))
             continue
 

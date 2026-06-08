@@ -14,6 +14,10 @@
      Example: "Student reviews of CS professors at [university] — useful because official
      course descriptions don't reflect teaching style, exam difficulty, or workload." -->
 
+My system is an unofficial guide for ProPresenter operators in church and media team environments. It focuses on practical questions that volunteers and production team members run into while preparing or running services, including lyrics, scriptures, stage screens, audience screens, Looks, themes, macros, timers, audio routing, and display configuration.
+
+This knowledge is valuable because many church media volunteers need quick, practical answers during rehearsals or Sunday services, but the information is spread across official documentation, tutorial videos, and feature-specific support articles. Official docs are useful, but they are organized by product feature rather than by the kinds of real-world questions a volunteer might ask, such as why lower-thirds lyrics look different from the main screen or why a countdown keeps resetting in an announcement loop.
+
 ---
 
 ## Document Sources
@@ -24,16 +28,20 @@
 
 | # | Source | Type | URL or file path |
 |---|--------|------|-----------------|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| 4 | | | |
-| 5 | | | |
-| 6 | | | |
-| 7 | | | |
-| 8 | | | |
-| 9 | | | |
-| 10 | | | |
+| 1 | ProPresenter- How to Download & Install | YouTube transcript | https://www.youtube.com/watch?v=7awG_JK6eWo |
+| 2 | Understanding The ProPresenter User Interface | Official Renewed Vision documentation | https://support.renewedvision.com/hc/en-us/articles/360041345954-Understanding-The-ProPresenter-User-Interface |
+| 3 | Keyboard Shortcuts in ProPresenter | Official Renewed Vision documentation | https://support.renewedvision.com/hc/en-us/articles/360042123293-Keyboard-Shortcuts-in-ProPresenter |
+| 4 | Using Bibles in ProPresenter | Official Renewed Vision documentation | https://support.renewedvision.com/hc/en-us/articles/360041347594-Using-Bibles-in-ProPresenter |
+| 5 | Using a Stage Screen to its Full Potential | Official Renewed Vision documentation | https://support.renewedvision.com/hc/en-us/articles/360041407794-Using-a-Stage-Screen-to-its-Full-Potential |
+| 6 | Using Macros in ProPresenter | Official Renewed Vision documentation | https://support.renewedvision.com/hc/en-us/articles/4402663090323-Using-Macros-in-ProPresenter |
+| 7 | Using Looks to Show Different Screen Content in ProPresenter | Official Renewed Vision documentation | https://support.renewedvision.com/hc/en-us/articles/360041407174-Using-Looks-to-Show-Different-Screen-Content-in-ProPresenter |
+| 8 | Audio Routing in ProPresenter | Official Renewed Vision documentation | https://support.renewedvision.com/hc/en-us/articles/360052696094-Audio-Routing-in-ProPresenter |
+| 9 | Audio Outputs in ProPresenter | Official Renewed Vision documentation | https://support.renewedvision.com/hc/en-us/articles/360052697694-Audio-Outputs-in-ProPresenter |
+| 10 | Screen Configuration in ProPresenter | Official Renewed Vision documentation | https://support.renewedvision.com/hc/en-us/articles/360041879173-Screen-Configuration-in-ProPresenter |
+| 11 | What is the Media Inspector | Official Renewed Vision documentation | https://support.renewedvision.com/hc/en-us/articles/7200487649299-What-is-the-Media-Inspector |
+| 12 | Creating and Using Playlist Templates in ProPresenter | Official Renewed Vision documentation | https://support.renewedvision.com/hc/en-us/articles/40377194830995-Creating-and-Using-Playlist-Templates-in-ProPresenter |
+| 13 | Guide to Using Themes in ProPresenter | Official Renewed Vision documentation | https://support.renewedvision.com/hc/en-us/articles/34551484745875-Guide-to-Using-Themes-in-ProPresenter |
+| 14 | How to Create a Countdown for an Audience Screen | Official Renewed Vision documentation | https://support.renewedvision.com/hc/en-us/articles/360050786794-How-to-Create-a-Countdown-for-an-Audience-Screen |
 
 ---
 
@@ -48,11 +56,23 @@
 
 **Chunk size:**
 
+The implemented chunker uses a hybrid heading-aware strategy. For official documentation, it first splits Markdown files by real headings such as `#`, `##`, and `###`, then also treats short standalone bold labels like `**Creating a Macro**` as soft headings when they function like section titles. The target chunk size is about 650 tokens, with a maximum of 950 tokens before a section is split further.
+
+For the YouTube transcript source, the chunker groups adjacent timestamped transcript entries instead of using document headings. The transcript target is about 425 words, with a maximum of 525 words, and each transcript chunk preserves start and end timestamps.
+
 **Overlap:**
+
+The system does not apply global overlap to every chunk. Instead, it uses up to 100 tokens of overlap only when an oversized section has to be split into smaller pieces. This keeps normal heading-based chunks clean while still preserving context when a long section is broken apart.
 
 **Why these choices fit your documents:**
 
+The corpus is mostly official Renewed Vision documentation, so the source files already have meaningful article titles, headings, lists, tables, and feature-specific sections. Splitting by document structure makes the retrieved context easier to cite and keeps related workflow steps together. The soft-heading rule matters because some documents, such as the Macros and Keyboard Shortcuts articles, use standalone bold labels as section boundaries instead of regular Markdown headings.
+
+This approach also avoids the main weakness of simple fixed-size chunking: cutting through menu instructions, shortcut tables, or step-by-step workflows. Each chunk keeps metadata such as `source_file`, `source_url`, `title`, `document_type`, `product`, `heading_path`, `chunk_index`, and token counts so retrieval and citations can show where an answer came from.
+
 **Final chunk count:**
+
+The final chunk count is 61 chunks across 14 documents. This includes 60 chunks from official documentation and 1 chunk from the YouTube transcript.
 
 ---
 
@@ -66,7 +86,15 @@
 
 **Model used:**
 
+The system uses `all-MiniLM-L6-v2` through `sentence-transformers` for embeddings. It stores the embeddings in a persistent ChromaDB collection named `propresenter_chunks`, using cosine similarity for dense semantic search. The default retrieval setting is `top_k = 5`.
+
+Each chunk is embedded with more than just the raw chunk text. The embedding input includes the title, heading path, document type, source file, chunk index, and chunk text. Adding this metadata helps short chunks retain their ProPresenter context, especially for terms like Looks, Stage Screens, Bibles, Macros, Media Inspector, Audio Routing, and Audience Screens.
+
 **Production tradeoff reflection:**
+
+I chose `all-MiniLM-L6-v2` because it is small, fast, free to run locally, and good enough for a small English-language RAG project. It works well as an MVP because the corpus is relatively small and most questions are practical support questions rather than extremely long or multilingual queries.
+
+If this were deployed for real users and cost was not a constraint, I would compare larger or newer embedding models based on accuracy, context length, latency, privacy, and multilingual support. I would also strongly consider hybrid retrieval, combining semantic vector search with BM25 keyword search, because this project includes exact UI labels, shortcuts, menu paths, and short feature names that dense retrieval can miss. A production version could also add metadata boosting and reranking so multi-concept questions retrieve the most useful chunks more reliably.
 
 ---
 
@@ -81,7 +109,27 @@
 
 **System prompt grounding instruction:**
 
+The system uses Groq's `llama-3.3-70b-versatile` model for answer generation. Before generation, it retrieves the top matching chunks from ChromaDB and formats them as numbered sources with titles, URLs, heading paths, source files, chunk indexes, retrieval scores, and chunk text. The model receives only the user's question and this retrieved ProPresenter context.
+
+The grounding prompt used by the system says:
+
+```text
+You are a ProPresenter support assistant for an unofficial guide.
+
+Grounding rules:
+- Answer only from the retrieved ProPresenter context provided by the user message.
+- If the context does not contain enough information, say that the provided ProPresenter documents do not contain enough information to answer.
+- If the question is vague, ask one concise clarifying question and, only if useful, mention the documented areas that may be relevant.
+- Do not use general product knowledge, assumptions, or unrelated advice.
+- Include source attribution with [Source N] markers for every factual claim that comes from the context.
+- Keep answers practical and concise.
+```
+
 **How source attribution is surfaced in the response:**
+
+Retrieved chunks are formatted as `Source 1`, `Source 2`, and so on before being sent to the model. The system prompt requires the generated answer to use `[Source N]` markers for factual claims. After the answer, the CLI prints a source list showing each source number, retrieval score, article title, heading path, local source file, chunk index, and URL.
+
+This structure makes the answer auditable: the user can see both the generated response and the exact retrieved documents that supported it. It also helps expose failures, such as cases where the answer says there is not enough information because retrieval missed a relevant source or because the corpus does not directly contain the needed cross-feature detail.
 
 ---
 

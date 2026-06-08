@@ -169,12 +169,12 @@ This divergence happened because the source documents were not all structured th
 
 **Instance 1**
 
-- *What I gave the AI:*
-- *What it produced:*
-- *What I changed or overrode:*
+- *What I gave the AI:* I gave Codex the Domain, Documents, and Chunking Strategy sections from `planning.md`, along with the local `documents/` folder. I asked it to help implement the ingestion and chunking stage for a ProPresenter guide, including preserving front matter metadata, source URLs, document titles, heading paths, and chunk indexes.
+- *What it produced:* Codex produced the ingestion and chunking modules that load the Markdown files, parse their metadata, and split the documents into structured chunks. It also helped create inspection scripts so I could check the number of chunks, the size of each chunk, and whether the heading paths were being preserved correctly.
+- *What I changed or overrode:* The first chunking approach produced some chunks that were too broad, especially in documents that used bold labels instead of normal Markdown headings. After inspecting the chunk output, I steered Codex to treat short standalone bold labels as soft section headings and to keep chunks more focused around specific ProPresenter workflows.
 
 **Instance 2**
 
-- *What I gave the AI:*
-- *What it produced:*
-- *What I changed or overrode:*
+- *What I gave the AI:* I gave Codex the Retrieval Approach, Architecture, and Evaluation Plan sections from `planning.md`. I asked it to implement the embedding, ChromaDB storage, retrieval, and grounded generation stages using `all-MiniLM-L6-v2` for embeddings and Groq's `llama-3.3-70b-versatile` model for answer generation.
+- *What it produced:* Codex produced the indexing script, retrieval helpers, generation function, and CLI script for asking questions against the indexed ProPresenter documents. It also helped format retrieved chunks with source titles, URLs, heading paths, scores, and `[Source N]` markers so generated answers could cite the context they used.
+- *What I changed or overrode:* I tested the five evaluation questions from `planning.md` myself through the CLI and recorded the actual responses in the README instead of assuming the system worked. I also added a failure case after testing the question "Do macros get saved in playlist templates?" because it revealed that dense retrieval focused on playlist template chunks and missed the dedicated macro document.

@@ -119,12 +119,21 @@
 
 **Question that failed:**
 
+Do macros get saved in playlist templates?
+
 **What the system returned:**
+
+The system said the provided ProPresenter documents do not contain enough information to answer whether macros get saved in playlist templates. It retrieved chunks from the Playlist Templates article and the general UI article, but it did not retrieve the dedicated `Using Macros in ProPresenter` document.
 
 **Root cause (tied to a specific pipeline stage):**
 
+This was a retrieval-stage failure. The query asks about the relationship between two concepts: macros and playlist templates. The dense retriever focused heavily on the "playlist templates" part of the question and returned several chunks from the playlist template document, but it failed to retrieve the macro document even though "macros" appeared directly in the query and there is a source dedicated to macros. Because the macro context was missing from the top 5 retrieved chunks, the generator could only say that the retrieved documents did not contain enough information.
+
+There is also a source coverage issue: the playlist template document explains that templates save service structure such as headers, placeholders, and presentations, while the macro document explains creating, triggering, and organizing macros. Neither source clearly states whether macros are included or excluded when saving a playlist template.
+
 **What you would change to fix it:**
 
+I would improve retrieval for multi-concept questions by adding hybrid search or keyword boosting, so exact terms like `macro`, `macros`, and `playlist template` are guaranteed to influence the top results. I would also consider query decomposition: retrieve chunks separately for `macros` and for `playlist templates`, then combine and rerank the results before generation. Finally, I would add or create a source that explicitly documents what playlist templates save and do not save, because the current corpus does not directly answer this cross-feature question.
 ---
 
 ## Spec Reflection

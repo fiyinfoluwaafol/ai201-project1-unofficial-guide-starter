@@ -134,6 +134,7 @@ There is also a source coverage issue: the playlist template document explains t
 **What you would change to fix it:**
 
 I would improve retrieval for multi-concept questions by adding hybrid search or keyword boosting, so exact terms like `macro`, `macros`, and `playlist template` are guaranteed to influence the top results. I would also consider query decomposition: retrieve chunks separately for `macros` and for `playlist templates`, then combine and rerank the results before generation. Finally, I would add or create a source that explicitly documents what playlist templates save and do not save, because the current corpus does not directly answer this cross-feature question.
+
 ---
 
 ## Spec Reflection
@@ -143,7 +144,15 @@ I would improve retrieval for multi-concept questions by adding hybrid search or
 
 **One way the spec helped you during implementation:**
 
+Writing `planning.md` first helped me think through how I wanted the system to be built before starting the actual pipeline code. It forced me to make design decisions early, including the domain, document sources, chunking strategy, retrieval approach, generation model, and evaluation questions. That made the implementation smoother because the AI tool had a clear blueprint to follow instead of needing to infer the system design from scratch.
+
+The spec was especially helpful because I built the pipeline one stage at a time across different Codex chat sessions. Since `planning.md` captured the intended behavior for each stage, I could give the relevant section to Codex as context and get implementation help that stayed aligned with the project. This meant there were fewer major corrections needed because the requirements were already written down in a concrete way.
+
 **One way your implementation diverged from the spec, and why:**
+
+One place where the implementation diverged slightly from the spec was the initial chunking implementation. The plan called for heading-aware chunks that preserved focused sections of each document, but some of the first chunks were still a little too broad and combined more information than I wanted. Once I noticed that, I intervened and steered Codex toward a more refined chunking approach so the chunks better matched the structure described in `planning.md`.
+
+This divergence happened because the source documents were not all structured the same way. Some documents had clear Markdown headings, while others used bold labels or longer sections that needed extra handling. Adjusting the chunking logic after inspecting the output helped the final implementation better match the original intent of the spec.
 
 ---
 

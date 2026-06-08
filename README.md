@@ -93,11 +93,11 @@
 
 | # | Question | Expected answer | System response (summarized) | Retrieval quality | Response accuracy |
 |---|----------|-----------------|------------------------------|-------------------|-------------------|
-| 1 | | | | | |
-| 2 | | | | | |
-| 3 | | | | | |
-| 4 | | | | | |
-| 5 | | | | | |
+| 1 | How do I open the Stage Layout editor in ProPresenter, and what shortcut can I use on Mac and Windows? | Open the Stage Layout editor from `Screens > Edit Layouts`. The shortcut is `Command+4` on Mac or `Control+4` on Windows. | To open the Stage Layout editor, select `Screens > Edit Layouts` from the menu bar or use the keyboard shortcut. The shortcut is `cmd+4` on Mac and `ctrl+4` on Windows. The response also noted that the editor lets you edit and customize Stage Screen layouts. | Relevant | Accurate |
+| 2 | If my lower-thirds lyrics look different from the main auditorium lyrics, where should I check first? | Check the Looks window, especially the alternate theme selected for the Presentation layer on the lower-thirds screen. If lyrics are unexpectedly different, make sure an alternate theme is not applied next to `Presentation` for that screen. | Check the Looks window first and make sure an alternate theme is not applied next to `Presentation`. The response explained that the alternate theme can determine how text on the `Lower Thirds` screen appears differently from the `Main Screen` lyrics. | Relevant | Accurate |
+| 3 | Why should I start a timer from a Header or from Timers instead of with a slide action in a looping announcement presentation? | Starting the timer from a Header or from Timers prevents the clock from resetting every time the looping slide is selected. Slide timer actions fire each time the slide is selected, so they are not recommended for an active slide in a looping presentation. | Starting a timer with a slide action causes the timer to reset every time the slide is selected, especially in an announcement loop. Starting it from a Header or from Timers prevents the clock from resetting every time. | Relevant | Accurate |
+| 4 | What does the `Break on New Verse` Bible slide option do, and when is `Verse References` available? | `Break on New Verse` creates new slides for each verse in a passage. `Verse References` is only available when `Break on New Verse` is selected. | `Break on New Verse` creates new slides for each verse of a passage. `Verse References` is available when `Break on New Verse` is selected and displays the verse reference on each slide. | Relevant | Accurate |
+| 5 | In the Audio Routing window, what do the `M`, `S`, and `T` buttons do? | `M` mutes a channel, `S` solos a channel, and `T` sends a tone to that channel. These can be used for troubleshooting audio signals. | In the Audio Routing window, `M` mutes a channel, `S` solos a channel, and `T` sends a tone to a channel. The response also said these functions can be used to troubleshoot audio signals. | Relevant | Accurate |
 
 **Retrieval quality:** Relevant / Partially relevant / Off-target  
 **Response accuracy:** Accurate / Partially accurate / Inaccurate
